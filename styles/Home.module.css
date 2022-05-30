@@ -1,15 +1,33 @@
 .container {
   padding: 0 2rem;
 }
-
-.main {
-  min-height: 100vh;
-  padding: 4rem 0;
-  flex: 1;
+.containerContent {
+  width: 100%;
+  height: 80vh;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
+}
+
+.profileContent {
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  overflow-y: auto;
+}
+
+.main {
+  width: 100%;
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  margin-bottom: 50px;
+  height: 100vh;
+  /* align-items: center; */
 }
 
 .footer {
