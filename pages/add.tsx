@@ -26,10 +26,12 @@ import {
 import { getDatabase, onValue, query, ref, set } from "firebase/database";
 import { app } from "utils";
 import { uuid } from "uuidv4";
+import { useRouter } from "next/router";
 
 const Home: NextPage = () => {
   const [profile, setProfile] = useState<any>({});
 
+  const router = useRouter();
   const key = "updatable";
 
   const addToFirebase = (values: any) => {
@@ -39,26 +41,30 @@ const Home: NextPage = () => {
     set(ref(db, "students/" + userId), values);
   };
 
-  const checkDuplicityOnDatabase = (name: string) => {
+  const checkDuplicityOnDatabase = (values: any) => {
     let duplicates = false;
     const db = getDatabase(app);
     const topUserPostsRef = query(ref(db, "students"));
     onValue(topUserPostsRef, (snapshot) => {
       snapshot.forEach((childSnapshot) => {
         const childData = childSnapshot.val();
-        duplicates = childData.name == name;
+        if (childData.name == values.name) {
+          duplicates = true;
+        }
       });
     });
-    return duplicates;
+    if (duplicates) {
+      openErrorMessage("ja existe a piranha no banco");
+      return;
+    }
+
+    !duplicates && addToFirebase(values);
+    router.push("/success");
+    openMessage("pronto, foi");
   };
 
   const onFinish = async (values: any) => {
-    if (checkDuplicityOnDatabase(values.name)) {
-      openErrorMessage("Ja tem ele adicionado");
-      return;
-    }
-    addToFirebase(values);
-    openMessage("pronto, foi");
+    checkDuplicityOnDatabase(values);
   };
 
   const openErrorMessage = (contentMessage: any) => {
@@ -151,6 +157,7 @@ const Home: NextPage = () => {
               >
                 <Form.Item name="banner">
                   <Input
+                    required
                     type={"url"}
                     placeholder="Banner"
                     onChange={(e) => {
@@ -171,6 +178,7 @@ const Home: NextPage = () => {
 
                 <Form.Item name="nickname">
                   <Input
+                    required
                     placeholder="Nick"
                     onChange={(e) => {
                       setProfile({ ...profile, nickname: e.target.value });
@@ -180,6 +188,7 @@ const Home: NextPage = () => {
 
                 <Form.Item name="name">
                   <Input
+                    required
                     placeholder="Nome"
                     onChange={(e) => {
                       setProfile({ ...profile, name: e.target.value });
@@ -189,6 +198,7 @@ const Home: NextPage = () => {
 
                 <Form.Item name="phrase">
                   <Input
+                    required
                     placeholder="Frase"
                     onChange={(e) =>
                       setProfile({ ...profile, phrase: e.target.value })
@@ -217,6 +227,7 @@ const Home: NextPage = () => {
                 </Form.Item>
                 <Form.Item name="description">
                   <Input.TextArea
+                    required
                     placeholder="Descrição do vagabundo"
                     onChange={(e) =>
                       setProfile({ ...profile, description: e.target.value })
@@ -239,7 +250,7 @@ const Home: NextPage = () => {
                           }}
                         >
                           <Form.Item name={name} {...restField} noStyle>
-                            <Input placeholder="Frase" />
+                            <Input placeholder="Frase" required />
                           </Form.Item>
                           <MinusCircleOutlined onClick={() => remove(name)} />
                         </div>
@@ -250,7 +261,7 @@ const Home: NextPage = () => {
                         block
                         icon={<PlusOutlined />}
                       >
-                        Add foto
+                        Add frase
                       </Button>
                     </>
                   )}
@@ -270,7 +281,7 @@ const Home: NextPage = () => {
                           }}
                         >
                           <Form.Item name={name} {...restField} noStyle>
-                            <Input placeholder="foto" />
+                            <Input placeholder="foto" required />
                           </Form.Item>
                           <MinusCircleOutlined onClick={() => remove(name)} />
                         </div>
