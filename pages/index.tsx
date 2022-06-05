@@ -2,7 +2,7 @@ import { Avatar, Card, Col, Image, Row, Typography } from "antd";
 import React, { useState, useEffect } from "react";
 import {} from "@ant-design/icons";
 import styles from "../styles/Home.module.css";
-import { getDatabase, onValue, ref } from "firebase/database";
+import { getDatabase, onValue, query, ref } from "firebase/database";
 import { app } from "utils";
 import Link from "next/link";
 

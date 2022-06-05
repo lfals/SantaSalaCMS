@@ -27,6 +27,7 @@ import { getDatabase, onValue, query, ref, set } from "firebase/database";
 import { app } from "utils";
 import { uuid } from "uuidv4";
 import { useRouter } from "next/router";
+import FormItem from "antd/lib/form/FormItem";
 
 const Home: NextPage = () => {
   const [profile, setProfile] = useState<any>({});
@@ -38,7 +39,7 @@ const Home: NextPage = () => {
     const userId = uuid();
     const db = getDatabase(app);
 
-    set(ref(db, "students/" + userId), values);
+    set(ref(db, "students/" + userId), { id: userId, ...values });
   };
 
   const checkDuplicityOnDatabase = (values: any) => {
@@ -125,7 +126,7 @@ const Home: NextPage = () => {
                 {profile?.tags?.map((tag: string, key: number) => (
                   <Tag
                     key={key}
-                    color={tag == profile?.masterTag ? "red" : "volcano"}
+                    color={tag == profile?.mastertag ? "red" : "volcano"}
                   >
                     {tag}
                   </Tag>
@@ -196,6 +197,28 @@ const Home: NextPage = () => {
                   />
                 </Form.Item>
 
+                <Form.List name="social">
+                  {() => (
+                    <div>
+                      <Form.Item name="twitter">
+                        <Input placeholder="twitter" />
+                      </Form.Item>
+                      <Form.Item name="facebook">
+                        <Input placeholder="facebook" />
+                      </Form.Item>
+                      <Form.Item name="instagram">
+                        <Input placeholder="instagram" />
+                      </Form.Item>
+                      <Form.Item name="linkedin">
+                        <Input placeholder="linkedin" />
+                      </Form.Item>
+                      <Form.Item name="github">
+                        <Input placeholder="github" />
+                      </Form.Item>
+                    </div>
+                  )}
+                </Form.List>
+
                 <Form.Item name="phrase">
                   <Input
                     required
@@ -218,7 +241,7 @@ const Home: NextPage = () => {
                 <Form.Item name="mastertag">
                   <Select
                     placeholder="mastertag"
-                    onChange={(e) => setProfile({ ...profile, masterTag: e })}
+                    onChange={(e) => setProfile({ ...profile, mastertag: e })}
                   >
                     {profile.tags?.map((tag: any, key: any) => (
                       <Select.Option key={tag}>{tag}</Select.Option>
@@ -236,7 +259,7 @@ const Home: NextPage = () => {
                 </Form.Item>
                 <Divider />
                 <Typography.Title level={4}>Frases</Typography.Title>
-                <Form.List name="prhases">
+                <Form.List name="phrases">
                   {(fields, { add, remove }) => (
                     <>
                       {fields.map(({ key, name, ...restField }) => (
