@@ -11,7 +11,6 @@ export default async function handler(req: any, res: any) {
         res.status(409).end(`Already exists`);
         return;
       } else {
-        console.log("alo");
         writeUserData(body);
       }
 
