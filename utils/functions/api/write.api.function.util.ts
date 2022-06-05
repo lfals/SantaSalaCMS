@@ -1,5 +1,5 @@
 import { randomUUID } from "crypto";
-import { getDatabase, ref, set } from "firebase/database";
+import { get, getDatabase, ref, set } from "firebase/database";
 import { app } from "@utils";
 
 function writeUserData(data: IStudent) {
