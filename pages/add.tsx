@@ -26,6 +26,10 @@ import {
   UserOutlined,
   MinusCircleOutlined,
 } from "@ant-design/icons";
+import { randomUUID } from "crypto";
+import { getDatabase, ref, set } from "firebase/database";
+import { app } from "utils";
+import { uuid } from "uuidv4";
 
 const Home: NextPage = () => {
   const [profile, setProfile] = useState<any>({});
@@ -36,23 +40,10 @@ const Home: NextPage = () => {
   const onFinish = async (values: any) => {
     message.loading({ content: "Loading...", key });
 
-    axios
-      .post("/api/student", values)
-      .then((response) => {
-        console.log(response);
-        openMessage();
-      })
-      .catch((error) => {
-        openErrorMessage();
-        console.log(error);
-      });
-  };
+    const userId = uuid();
+    const db = getDatabase(app);
 
-  const openErrorMessage = () => {
-    message.error({ content: "Erro né!", key, duration: 2 });
-  };
-  const openMessage = () => {
-    message.success({ content: "Loaded!", key, duration: 2 });
+    set(ref(db, "students/" + userId), values);
   };
 
   return (
