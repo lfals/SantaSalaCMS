@@ -23,11 +23,11 @@ const Index: NextPage = () => {
   const [lockItems, setLockItems] = useState<string[]>([]);
 
   const filteredSubjectOptions = subjectNames.filter(
-    (o) => !dependenceItems.includes(o)
+    (o: any) => !dependenceItems.includes(o)
   );
 
   const filteredLockOptions = subjectNames.filter(
-    (o) => !lockItems.includes(o)
+    (o: any) => !lockItems.includes(o)
   );
 
   const addToFirebase = (values: any) => {
@@ -119,7 +119,7 @@ const Index: NextPage = () => {
             onChange={setDependenceItems}
             style={{ width: "100%" }}
           >
-            {filteredSubjectOptions.map((item, i) => (
+            {filteredSubjectOptions.map((item: any, i: any) => (
               <Select.Option key={i} value={item}>
                 {item}
               </Select.Option>
@@ -133,7 +133,7 @@ const Index: NextPage = () => {
             onChange={setLockItems}
             style={{ width: "100%" }}
           >
-            {filteredLockOptions.map((item, i) => (
+            {filteredLockOptions.map((item: any, i: any) => (
               <Select.Option key={i} value={item}>
                 {item}
               </Select.Option>
